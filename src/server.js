@@ -11,8 +11,7 @@ let app = express();
 //don't show the log when it is test
 //if (config.util.getEnv('NODE_ENV') !== 'test') {
   //use morgan to log at command line
-  //app.use(morgan('combined')); //'combined' outputs the Apache style 
-LOGs
+  //app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 //}
 
 //parse application/json and look for raw text
