@@ -128,6 +128,7 @@ const updateBook = (req, res) => {
       res.status(400).send({ message: 'an Error occured' });
     } else {
       let obj = JSON.parse(data); //now it an object
+
       const bookIndex = obj.books.findIndex(element => {
         if (element.id === req.params.id) {
           return element;
