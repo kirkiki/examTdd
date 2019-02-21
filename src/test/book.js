@@ -15,9 +15,9 @@ chai.use(chaiAsPromised);
 
 describe('Test intégration (Empty database)', () => {
     beforeEach(() => {
-    const pathBook = path.resolve('../data/books.json');
-        resetDatabase(path.join(__dirname, '../data/books.json'), {"books": []})
-});
+        const pathBook = path.resolve('../data/books.json');
+            resetDatabase(path.join(__dirname, '../data/books.json'), {"books": []})
+    });
 
     it('get books as array of length 0', function(done) {
         chai.request('http://localhost:8080')
@@ -44,13 +44,57 @@ describe('Test intégration (Empty database)', () => {
             done();                               
         });
     });
-  
-  });
+});
+
+ var obj = {"books":[{"id":"0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9","title":"Coco raconte Channel 2","years":1990,"pages":400}]}
 
 
 
-// var obj = {"books":[{"id":"0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9","title":"Coco raconte Channel 2","years":1990,"pages":400}]}
 
+
+
+describe('Test intégration (Empty database)', () => {
+    beforeEach(() => {
+        const pathBook = path.resolve('../data/books.json');
+            resetDatabase(path.join(__dirname, '../data/books.json'), obj)
+    });
+    it('put books', function(done) {
+        chai.request('http://localhost:8080')
+        .put('/book/0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
+                .set('content-type', 'application/x-www-form-urlencoded')
+        .send({
+            title: 'Coco raconte Channel 42',
+            years: 1990,
+            pages: 480
+          })
+          .end((err, res) => {
+                    if (err) console.log(err)
+                    expect(res).to.have.status(200)
+                    expect(res.body).to.be.a('object')
+                    expect(res.body.message).to.equal('book successfully updated')
+                    done()
+                  })
+    });
+});
+
+// it('should update a book', done => {
+//     chai
+//       .request(server)
+//       .put('/book/0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
+//       .set('content-type', 'application/x-www-form-urlencoded')
+//       .send({
+//         title: 'Coco raconte Channel 42',
+//         years: 1990,
+//         pages: 480
+//       })
+//       .end((err, res) => {
+//         if (err) console.log(err)
+//         expect(res).to.have.status(200)
+//         expect(res.body).to.be.a('object')
+//         expect(res.body.message).to.equal('book successfully updated')
+//         done()
+//       })
+//   })
 // it('put books', function(done) {
 //     resetDatabase(path.join(__dirname, '../data/books.json'), obj)
     
