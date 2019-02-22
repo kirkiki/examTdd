@@ -1,4 +1,2 @@
 # examTdd
 
-ewfwefwe
-rwgergre
