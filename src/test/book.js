@@ -45,19 +45,33 @@ describe('Test intégration (Empty database)', () => {
         });
     });
 });
-
- var obj = {"books":[{"id":"0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9","title":"Coco raconte Channel 2","years":1990,"pages":400}]}
-
+var obj = {"books": [{"id":"0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9","title":"Coco raconte Channel 2","years":1990,"pages":400}]}
 
 
-
-
-
-describe('Test intégration (Empty database)', () => {
+describe('Test intégration2 (Empty database)', () => {
     beforeEach(() => {
         const pathBook = path.resolve('../data/books.json');
             resetDatabase(path.join(__dirname, '../data/books.json'), obj)
     });
+
+    it('get books', function(done) {
+        chai.request('http://localhost:8080')
+        .get('/book/0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
+        .end((err, res) => {
+            if (err) console.log(err)
+                expect(res).to.have.status(200)
+                expect(res.body).to.be.a('object')
+                expect(res.body.message).to.equal('book fetched')
+                expect(res.body.book.title).to.be.a('string')
+                expect(res.body.book.title).to.equal("Coco raconte Channel 2")
+                expect(res.body.book.years).to.be.a('number')
+                expect(res.body.book.years).to.equal(1990)
+                expect(res.body.book.pages).to.be.a('number')
+                expect(res.body.book.pages).to.equal(400)
+                done()
+        })
+    });
+
     it('put books', function(done) {
         chai.request('http://localhost:8080')
         .put('/book/0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
@@ -66,46 +80,29 @@ describe('Test intégration (Empty database)', () => {
             title: 'Coco raconte Channel 42',
             years: 1990,
             pages: 480
-          })
-          .end((err, res) => {
-                    if (err) console.log(err)
-                    expect(res).to.have.status(200)
-                    expect(res.body).to.be.a('object')
-                    expect(res.body.message).to.equal('book successfully updated')
-                    done()
-                  })
+        })
+        .end((err, res) => {
+            if (err) console.log(err)
+                expect(res).to.have.status(200)
+                expect(res.body).to.be.a('object')
+                expect(res.body.message).to.equal('book successfully updated')
+                done()
+        })
+    });
+
+    it('delete books', function(done) {
+        chai.request('http://localhost:8080')
+        .delete('/book/0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
+        .end((err, res) => {
+            if (err) console.log(err)
+                expect(res).to.have.status(200)
+                expect(res.body.message).to.equal('book successfully deleted')
+                done()
+        })
     });
 });
 
-// it('should update a book', done => {
-//     chai
-//       .request(server)
-//       .put('/book/0db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
-//       .set('content-type', 'application/x-www-form-urlencoded')
-//       .send({
-//         title: 'Coco raconte Channel 42',
-//         years: 1990,
-//         pages: 480
-//       })
-//       .end((err, res) => {
-//         if (err) console.log(err)
-//         expect(res).to.have.status(200)
-//         expect(res.body).to.be.a('object')
-//         expect(res.body.message).to.equal('book successfully updated')
-//         done()
-//       })
-//   })
-// it('put books', function(done) {
-//     resetDatabase(path.join(__dirname, '../data/books.json'), obj)
-    
-//     chai.request('http://localhost:8080')
-//     .put('/book/db0b43e-dddb-47ad-9b4a-e5fe9ec7c2a9')
-//     .end(function(err, res) {
-//         expect(res).to.have.status(200);
-//         expect(res.body.message).to.contains('book successfully updated')
-//         done();                               
-//     });
-// });
+
 
 // tout les packages et fonction nescessaire au test sont importé ici, bon courage
 
